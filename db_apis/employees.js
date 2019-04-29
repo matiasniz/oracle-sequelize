@@ -1,10 +1,9 @@
-const oracledb = require('oracledb');
 const Employee = require('../models/Employee');
 const { db } = require('./../services/database');
 
 async function find(context) {
   if (context.id) {
-    return Employee.findAll({where: {'EMPLOYEE_ID': context.id} });
+    return Employee.findAll({where: {EMPLOYEE_ID: context.id} });
   } 
   return Employee.findAll();
 }
