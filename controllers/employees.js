@@ -26,17 +26,19 @@ module.exports.get = get;
 
 
 function getEmployeeFromRec(req) {
+
   const employee = {
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email,
-    phone_number: req.body.phone_number,
-    hire_date: req.body.hire_date,
-    job_id: req.body.job_id,
-    salary: req.body.salary,
-    commission_pct: req.body.commission_pct,
-    manager_id: req.body.manager_id,
-    department_id: req.body.department_id
+    EMPLOYEE_ID: req.body.EMPLOYEE_ID,
+    FIRST_NAME: req.body.first_name,
+    LAST_NAME: req.body.last_name,
+    EMAIL: req.body.email,
+    PHONE_NUMBER: req.body.phone_number,
+    HIRE_DATE: new Date(req.body.hire_date),
+    JOB_ID: req.body.job_id,
+    SALARY: req.body.salary,
+    COMMISSION_PCT: req.body.commission_pct,
+    MANAGER_ID: req.body.manager_id,
+    DEPARTMENT_ID: req.body.department_id
   };
  
   return employee;
@@ -61,8 +63,8 @@ async function put(req, res, next) {
   try {
     let employee = getEmployeeFromRec(req);
  
-    employee.employee_id = parseInt(req.params.id, 10);
- 
+    // employee.EMPLOYEE_ID = parseInt(req.params.id, 10);
+    
     employee = await employees.update(employee);
  
     if (employee !== null) {
@@ -82,11 +84,11 @@ async function del(req, res, next) {
     const id = parseInt(req.params.id, 10);
  
     const success = await employees.delete(id);
- 
-    if (success) {
-      res.status(204).end();
+
+    if (success[1].rowsAffected > 0) {
+      res.status(200).end("ok");
     } else {
-      res.status(404).end();
+      res.status(404).end("failure");
     }
   } catch (err) {
     next(err);

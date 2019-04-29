@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize')
 const { db } = require('../services/database');
 
-
 const Employee = db.define('Employee', { 
     // attributes
     EMPLOYEE_ID: {
@@ -12,7 +11,43 @@ const Employee = db.define('Employee', {
     FIRST_NAME: {
         type: Sequelize.STRING
         // allowNull defaults to true
-    }
+    },
+    LAST_NAME: {
+        type: Sequelize.STRING
+        // allowNull defaults to true
+    },
+    EMAIL: {
+        type: Sequelize.STRING
+        // allowNull defaults to true
+    },
+    PHONE_NUMBER: {
+        type: Sequelize.STRING
+        // allowNull defaults to true
+    },
+    HIRE_DATE: {
+        type: Sequelize.DATE
+        // allowNull defaults to true
+    },
+    JOB_ID: {
+        type: Sequelize.INTEGER
+        // allowNull defaults to true
+    },
+    SALARY: {
+        type: Sequelize.FLOAT
+        // allowNull defaults to true
+    },
+    COMMISSION_PCT: {
+        type: Sequelize.FLOAT
+        // allowNull defaults to true
+    },
+    MANAGER_ID: {
+        type: Sequelize.INTEGER
+        // allowNull defaults to true
+    },
+    DEPARTMENT_ID: {
+        type: Sequelize.INTEGER
+        // allowNull defaults to true
+    },
  }, {
     // don't add the timestamp attributes (updatedAt, createdAt)
     timestamps: false,

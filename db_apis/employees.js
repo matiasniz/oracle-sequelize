@@ -1,5 +1,6 @@
 const oracledb = require('oracledb');
 const Employee = require('../models/Employee');
+const { db } = require('./../services/database');
 
 async function find(context) {
   if (context.id) {
@@ -12,48 +13,40 @@ module.exports.find = find;
 
 
 async function create(emp) {
-  const employee = Object.assign({}, emp);
- 
-  employee.employee_id = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER
-  }
- 
-  const result = await database.simpleExecute(createSql, employee);
- 
-  employee.employee_id = result.outBinds.employee_id[0];
- 
-  return employee;
+  return Employee
+  .create(emp)
+  .then((em) => Employee.findOrCreate( { where: {EMPLOYEE_ID: em.EMPLOYEE_ID} } ))
+  .then(([employee, created]) => {
+    console.log(employee.get({
+      plain: true
+    }))
+    return employee
+
+  })
 }
  
 module.exports.create = create;
 
 
 async function update(emp) {
-  const employee = Object.assign({}, emp);
-  const result = await database.simpleExecute(updateSql, employee);
- 
-  if (result.rowsAffected && result.rowsAffected === 1) {
-    return employee;
-  } else {
-    return null;
-  }
+  return Employee.find({ where: { EMPLOYEE_ID: emp.EMPLOYEE_ID } })
+  .then(function (employee) {
+    // Check if record exists in db
+    if (employee) {
+      employee.update({
+        ...emp
+      })
+      return employee
+    }
+  })
 }
  
 module.exports.update = update;
 
 
 async function del(id) {
-  const binds = {
-    employee_id: id,
-    rowcount: {
-      dir: oracledb.BIND_OUT,
-      type: oracledb.NUMBER
-    }
-  }
-  const result = await database.simpleExecute(deleteSql, binds);
- 
-  return result.outBinds.rowcount === 1;
+  const resultado = await db.query("DELETE from EMPLOYEES where EMPLOYEE_ID=" + id).then( res => res)
+  return resultado
 }
  
 module.exports.delete = del;
